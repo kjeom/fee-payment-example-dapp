@@ -11,7 +11,7 @@
   "dependencies": {
     "@kaiachain/ethers-ext": "1.1.1",
     "@kaiachain/js-ext-core": "1.1.1",
-    "@linenext/dapp-portal-sdk": "^1.2.5",
+    "@linenext/dapp-portal-sdk": "^1.2.6",
     "@okxconnect/ui": "^1.7.4",
     "ethers": "^6.13.5",
     "next": "15.1.5",
