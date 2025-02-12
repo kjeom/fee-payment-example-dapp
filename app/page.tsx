@@ -2,9 +2,13 @@
 
 import React, { useState } from "react";
 import DappPortalSDK from "@linenext/dapp-portal-sdk";
-import { TxType } from "@kaiachain/ethers-ext/v6";
+import { TxType } from "@kaiachain/ethers-ext";
 import { ethers } from "ethers";
 import JSONPretty from "react-json-pretty";
+
+interface RlpEncodedTx {
+  raw: string;
+}
 
 export default function Page() {
   const [provider, setProvider] = useState<any>(null);
@@ -15,6 +19,27 @@ export default function Page() {
   const [vtTx, setVtTx] = useState({});
   const [vtmTx, setVtmTx] = useState({});
   const [scTx, setScTx] = useState({});
+  const [scResult, setScResult] = useState({});
+  const [vtResult, setVtResult] = useState({});
+  const [vtmResult, setVtmResult] = useState({});
+
+  const requestFeeDelegation = async (tx: RlpEncodedTx) => {
+    const result = fetch(
+      "https://fee-delegated-tx-example-dapp.vercel.app/api/requestFeeDelegation",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userSignedTx: tx }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        return data;
+      });
+    return result;
+  };
 
   const connectWalletByDappPortalSDK = async () => {
     const sdk = await DappPortalSDK.init({
@@ -47,6 +72,8 @@ export default function Page() {
       params: [tx],
     });
     setFdvt(userSignedTx);
+    const data = await requestFeeDelegation(userSignedTx);
+    setVtResult(data);
   };
 
   const feeDelegatedSmartContractExeuction = async () => {
@@ -77,6 +104,8 @@ export default function Page() {
       params: [tx],
     });
     setFdsc(userSignedTx);
+    const data = await requestFeeDelegation(userSignedTx);
+    setScResult(data);
   };
 
   const feeDelegatedValueTransferWithMemo = async () => {
@@ -101,6 +130,8 @@ export default function Page() {
       params: [tx],
     });
     setFdvtm(userSignedTx);
+    const data = await requestFeeDelegation(userSignedTx);
+    setVtmResult(data);
   };
 
   return (
@@ -135,6 +166,12 @@ export default function Page() {
           data={fdvt}
           className="bg-slate-100 my-2 p-2"
         ></JSONPretty>
+        <span>Fee Delegated Value Transfer Result:</span>
+        <JSONPretty
+          id="json-pretty"
+          data={vtResult}
+          className="bg-slate-100 my-2 p-2"
+        ></JSONPretty>
       </div>
       <div className="flex flex-col">
         <div>
@@ -157,6 +194,12 @@ export default function Page() {
           data={fdvtm}
           className="bg-slate-100 my-2 p-2"
         ></JSONPretty>
+        <span>Fee Delegated Value Transfer with memo Result:</span>
+        <JSONPretty
+          id="json-pretty"
+          data={vtmResult}
+          className="bg-slate-100 my-2 p-2"
+        ></JSONPretty>
       </div>
       <div className="flex flex-col">
         <div>
@@ -177,6 +220,12 @@ export default function Page() {
         <JSONPretty
           id="json-pretty"
           data={fdsc}
+          className="bg-slate-100 my-2 p-2"
+        ></JSONPretty>
+        <span>Fee Delegated Smart Contract Result:</span>
+        <JSONPretty
+          id="json-pretty"
+          data={scResult}
           className="bg-slate-100 my-2 p-2"
         ></JSONPretty>
       </div>
