@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const userSignedTx = await req.json();
     const result = await fetch(
-      "https://fee-delegation-kairos.kaia.io/api/signAsFeePayer",
+      "https://fee-delegation.kaia.io/api/signAsFeePayer",
       {
         method: "POST",
         headers: {

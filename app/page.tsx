@@ -44,7 +44,7 @@ export default function Page() {
   const connectWalletByDappPortalSDK = async () => {
     const sdk = await DappPortalSDK.init({
       clientId: "30eb8e86-1096-44ef-b9db-f7efa00f9b89",
-      chainId: "1001",
+      chainId: "8217",
     });
     const provider = sdk.getWalletProvider();
     const accounts = await provider.request({ method: "eth_requestAccounts" });
